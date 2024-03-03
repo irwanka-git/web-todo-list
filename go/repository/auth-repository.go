@@ -9,16 +9,26 @@ import (
 
 type AuthRepository interface {
 	AuthLogin(credential *entity.UserCredentials) (*entity.User, error)
+	GetUserByUuid(uuid string) (*entity.User, error)
 }
 
 func NewAuthRepository() AuthRepository {
 	return &repo{}
 }
 
+func (*repo) GetUserByUuid(uuid string) (*entity.User, error) {
+	var userCek *entity.User
+	result := db.Table("users").Where("uuid = ? ", uuid).First(&userCek)
+	if result.RowsAffected == 0 {
+		return nil, errors.New("email tidak ditemukan")
+	}
+	return userCek, nil
+}
+
 func (*repo) AuthLogin(credential *entity.UserCredentials) (*entity.User, error) {
 	var userCek *entity.User
 
-	result := db.Table("users").Where("email = ? ", credential.Email).First(userCek)
+	result := db.Table("users").Where("email = ? ", credential.Email).First(&userCek)
 
 	if result.RowsAffected == 0 {
 		return nil, errors.New("email tidak ditemukan")

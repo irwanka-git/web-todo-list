@@ -48,8 +48,8 @@ func init() {
 func main() {
 	fmt.Println("Buat User")
 	var user = entity.User{}
-	user.Email = "irwanka.email@gmail.com"
-	user.NamaPengguna = "Irwan Kurniawan"
+	user.Email = "akbarfajar.email@gmail.com"
+	user.NamaPengguna = "Akbar Fajar"
 	user.UUID = uuid.New().String()
 	bytesPassword, errCryptPassword := bcrypt.GenerateFromPassword([]byte("123456"), 14)
 	if errCryptPassword != nil {

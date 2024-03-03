@@ -19,9 +19,10 @@ func CreateJWTTokenLogin(user *entity.User) (string, error) {
 
 	tokenAuth := jwtauth.New("HS512", []byte(signKey), nil)
 
-	uuid := user.UUID
+	sub := user.UUID
 	claims := map[string]interface{}{
-		"uuid":          uuid,
+		"id":            user.ID,
+		"sub":           sub,
 		"email":         user.Email,
 		"nama_pengguna": user.NamaPengguna,
 	}

@@ -61,7 +61,7 @@ func (*controller) SubmitLogin(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusAccepted)
 	json.NewEncoder(w).Encode(helper.ResponseData{
 		Status:  true,
-		Message: "Login Berhasil",
+		Message: "login berhasil",
 		Data: map[string]interface{}{
 			"access_token":  access_token,
 			"email":         userLogin.Email,
@@ -69,5 +69,4 @@ func (*controller) SubmitLogin(w http.ResponseWriter, r *http.Request) {
 			"uuid":          userLogin.UUID,
 		},
 	})
-
 }

@@ -12,12 +12,16 @@ import (
 	"github.com/go-chi/cors"
 	"github.com/go-chi/jwtauth"
 	"github.com/joho/godotenv"
+
+	customMiddleware "irwanka/webtodolist/middleware"
 )
 
 var (
 	tokenAuth      *jwtauth.JWTAuth
-	homeController controller.HomeController = controller.NewHomeController()
-	authController controller.AuthController = controller.NewAuthController()
+	homeController controller.HomeController       = controller.NewHomeController()
+	authController controller.AuthController       = controller.NewAuthController()
+	taskController controller.TaskController       = controller.NewTaskController()
+	userMiddleware customMiddleware.UserMiddleware = customMiddleware.NewUserMiddleware()
 )
 
 func init() {
@@ -51,6 +55,17 @@ func main() {
 	r.Route("/api", func(r chi.Router) {
 		r.Get("/", homeController.Welcome)
 		r.Post("/login", authController.SubmitLogin)
+
+		r.Group(func(r chi.Router) {
+			r.Use(jwtauth.Verifier(tokenAuth))
+			r.Use(jwtauth.Authenticator)
+			r.Use(userMiddleware.SetValueContext)
+			r.Get("/list-task", taskController.GetListTask)
+			r.Get("/get-detil-task/{id}", taskController.GetDetilTask)
+			r.Post("/create-task", taskController.CreateTask)
+			r.Patch("/update-task/{id}", taskController.UpdateTask)
+			r.Delete("/delete-task/{id}", taskController.DeleteTask)
+		})
 	})
 
 	http.ListenAndServe(port, r)

@@ -10,3 +10,8 @@ type Task struct {
 	UpdatedAt   time.Time `gorm:"column:updated_at" json:"updated_at"`
 	CreateBy    int32     `gorm:"column:create_by" json:"create_by"`
 }
+
+type InputTask struct {
+	Title       string `json:"title" validate:"required"`
+	Description string `json:"description" validate:"required"`
+}

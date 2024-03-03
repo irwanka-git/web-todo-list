@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
-
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -23,7 +22,6 @@ func init() {
 	if err != nil {
 		log.Panicln("Error loading .env file")
 	}
-
 	dbOpen, errDBOpen := gorm.Open(mysql.Open(os.Getenv("DSN_MYSQL")), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Error),
 		NowFunc: func() time.Time {
@@ -36,5 +34,4 @@ func init() {
 		log.Panicln("error Connection Database")
 	}
 	db = dbOpen
-
 }
