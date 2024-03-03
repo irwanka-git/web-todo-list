@@ -1,33 +1,51 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { AuthProtected } from './middleware/AuthProtected'
+import { PageTask } from './pages/PageTask'
+import { PageLogin } from './pages/PageLogin'
+import { BaseLayout } from './layouts/BaseLayout'
+import axios from 'axios'
+import ls from 'localstorage-slim';
+import { LoginProtected } from './middleware/LoginProtected'
+
+axios.interceptors.response.use(response => {
+  return response.data;
+}, error => {
+  if (error.response) {
+    console.log(error.response)
+    return error.response.data
+  } else {
+    console.log("ERROR RESPONSE REFUSED")
+    return
+  }
+});
+
+axios.interceptors.request.use(function (config) {
+  config.baseURL = import.meta.env.VITE_BASE_URL_API
+  const appID = import.meta.env.VITE_APP_ID
+  const storageValue = ls.get(appID + '.access', { decrypt: true });
+  if (storageValue) {
+      config.headers.Authorization = `Bearer ${storageValue}`;
+  }
+  return config;
+});
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<BaseLayout />}>
+            <Route element={<AuthProtected />}>
+              <Route path='/' element={<PageTask />} />
+            </Route>
+            <Route element={<LoginProtected />}>
+              <Route path='/login' element={<PageLogin />} />
+            </Route>
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </>
   )
 }
