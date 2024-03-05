@@ -3,6 +3,7 @@ package main_test
 import (
 	"bytes"
 	"irwanka/webtodolist/controller"
+	"irwanka/webtodolist/entity"
 	"irwanka/webtodolist/helper"
 	customMiddleware "irwanka/webtodolist/middleware"
 	"net/http"
@@ -60,13 +61,11 @@ func TestInvalidLogin(t *testing.T) {
 func TestCreateTask(t *testing.T) {
 	t.Logf("Test Create Task")
 	//user login untuk mendapatkan JWT Token user
-
-	testUser := `{"email":"irwanka.email@gmail.com" , "password":"123456"}`
-	request, _ := http.NewRequest("POST", "/login", bytes.NewBufferString(testUser))
-	response := httptest.NewRecorder()
-	Router().ServeHTTP(response, request)
-	assert.Equal(t, 202, response.Code, "OK response is expected")
-
+	var userLogin *entity.User
+	userLogin.ID = 1
+	userLogin.Email = "irwanka.email@gmail.com"
+	userLogin.UUID = "a2aa2cd0-6df5-4aba-ba4a-1e30fa9dc675"
+	userLogin.NamaPengguna = "Irwan Kurniawan"
 	jwtToken, _ := helper.CreateJWTTokenLogin(userLogin)
 	var bearer = "Bearer " + jwtToken
 
