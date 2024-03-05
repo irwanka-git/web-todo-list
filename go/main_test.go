@@ -2,6 +2,7 @@ package main_test
 
 import (
 	"bytes"
+	"fmt"
 	"irwanka/webtodolist/controller"
 	"irwanka/webtodolist/entity"
 	"irwanka/webtodolist/helper"
@@ -66,6 +67,8 @@ func TestCreateTask(t *testing.T) {
 	userLogin.Email = "irwanka.email@gmail.com"
 	userLogin.UUID = "a2aa2cd0-6df5-4aba-ba4a-1e30fa9dc675"
 	userLogin.NamaPengguna = "Irwan Kurniawan"
+
+	fmt.Println(userLogin)
 	jwtToken, _ := helper.CreateJWTTokenLogin(userLogin)
 	var bearer = "Bearer " + jwtToken
 
