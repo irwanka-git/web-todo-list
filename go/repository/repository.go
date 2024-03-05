@@ -23,7 +23,7 @@ func init() {
 		log.Panicln("Error loading .env file")
 	}
 	dbOpen, errDBOpen := gorm.Open(mysql.Open(os.Getenv("DSN_MYSQL")), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Error),
+		Logger: logger.Default.LogMode(logger.Silent),
 		NowFunc: func() time.Time {
 			ti, _ := time.LoadLocation("Asia/Jakarta")
 			return time.Now().In(ti)
