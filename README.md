@@ -24,4 +24,12 @@ go test -v
 ```
 
 
+#Akses Web Aplikasi 
+```
+http://localhost:8000
+```
 
+#Akses API Aplikasi 
+```
+http://localhost:8000/api
+```
